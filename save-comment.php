@@ -1,5 +1,7 @@
 <?php
 
+require_once ('libraries/database.php');
+require_once ('libraries/utils.php');
 /**
  * CE FICHIER DOIT ENREGISTRER UN NOUVEAU COMMENTAIRE EST REDIRIGER SUR L'ARTICLE !
  * 
@@ -55,10 +57,8 @@ if (!$author || !$article_id || !$content) {
  * 
  * PS : Ca fait pas genre 3 fois qu'on écrit ces lignes pour se connecter ?! 
  */
-$pdo = new PDO('mysql:host=localhost;dbname=blogpoo;charset=utf8', 'root', '', [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-]);
+$pdo = getpdo();
+
 
 $query = $pdo->prepare('SELECT * FROM articles WHERE id = :article_id');
 $query->execute(['article_id' => $article_id]);
@@ -75,3 +75,5 @@ $query->execute(compact('author', 'content', 'article_id'));
 // 4. Redirection vers l'article en question :
 header('Location: article.php?id=' . $article_id);
 exit();
+
+redirect( 'article.php?id=' . $article_id);
